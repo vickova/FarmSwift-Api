@@ -31,7 +31,7 @@ export const verifyUser = (req, res, next)=>{
         }
     })
 }
-export const verifyAdmin = (req, res, next)=>{
+export const verifySeller = (req, res, next)=>{
     verifyToken(req, res, next, ()=>{
         if(req.user.role === 'admin'){
             next()

@@ -1,11 +1,12 @@
 import Products from "../model/Products.js"
 // create new tour
 export const createProduct =  async (req, res)=>{
-    const newTour = new Products(req.body)
+    req.body.createdBy = req.user.id;
+    const newProduct = new Products(req.body)
 
     try {
-        const savedTour = await newTour.save()
-        res.status(200).json({success:true, message:'Successfully created', data:savedTour})
+        const savedProduct = await newProduct.save()
+        res.status(200).json({success:true, message:'Successfully created', data:savedProduct})
     } catch (err) {
         res.status(500).json({success:false, message:'Failed to create. Try again'})
     }
@@ -16,10 +17,11 @@ export const updateProduct = async (req, res)=>{
 
     const id = req.params.id
     try {
-        const updatedTour = await Tour.findByIdAndUpdate(id, {
+        const updatedProduct = await Products.findByIdAndUpdate({
+            _id:req.params.id, createdBy:req.user.id}, {
             $set:req.body
         }, {new:true});
-        res.status(200).json({success:true, message:'Successfully updated', data:updatedTour})
+        res.status(200).json({success:true, message:'Successfully updated', data:updatedProduct})
     } catch (err) {
         res.status(500).json({success:false, message:'Failed to update. Try again'})
     }
@@ -28,7 +30,7 @@ export const updateProduct = async (req, res)=>{
 export const deleteProduct = async (req, res)=>{
     const id = req.params.id
     try {
-        await Tour.findByIdAndDelete(id);
+        await Products.findByIdAndDelete(id);
         res.status(200).json({success:true, message:'Successfully deleted'})
     } catch (err) {
         res.status(500).json({success:false, message:'Failed to delete. Try again'})
@@ -38,7 +40,7 @@ export const deleteProduct = async (req, res)=>{
 export const getSingleProduct = async (req, res)=>{
     const id = req.params.id
     try {
-        const tour = await Tour.findById(id).populate('reviews');
+        const tour = await Products.findById(id).populate('reviews');
         res.status(200).json({success:true, message:'Successfully deleted', data:tour})
     } catch (err) {
         res.status(500).json({success:false, message:'not found'})
@@ -48,9 +50,10 @@ export const getSingleProduct = async (req, res)=>{
 export const getAllProducts = async (req, res)=>{
     // for pagination
     const page = parseInt(req.query.page);
+    console.log(req.query)
     console.log(page)
     try {
-        const tours = await Tour.find({}).populate('reviews').skip(page*8).limit(8)
+        const tours = await Products.find({}).skip(page*8).limit(8)
         res.status(200).json({success:true,count:tours.length, message:'Successful', data:tours})
     } catch (err) {
         res.status(404).json({success:false, message:'not found'})
@@ -69,7 +72,7 @@ export const getProductBySearch = async(req, res)=>{
         // gte means greater than equal i.e selects the documents where the value of the specified field is greater than or equal to
         // { $set: { "price": 9.99 } : The following example sets the price field based on a 
         // $gte
-        const tours = await Tour.find({city, distance:{$gte:distance}, maxGroupSize:{$gte:maxGroupSize}}).populate('reviews')
+        const tours = await Products.find({city, distance:{$gte:distance}, maxGroupSize:{$gte:maxGroupSize}}).populate('reviews')
 
         res.status(200).json({success:true,count:tours.length, message:'Successful', data:tours})
     } catch (err) {
