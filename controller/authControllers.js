@@ -17,11 +17,14 @@ export const register = async(req, res)=>{
             password:hash,
             photo:req.body.photo,
             role:req.body.role,
-            user_role:req.body.user_role
+            user_role:req.body.user_role,
+            description: req.body.description
         })
+        console.log(newUser)
         await newUser.save()
         res.status(200).json({success:true, message:'Succesfully created'})
     } catch (err) {
+        console.error("Registration Error:", err);  // Log the error
         res.status(500).json({success:false, message:'Failed to create. Try again',})
         
     }
@@ -33,6 +36,7 @@ export const login = async(req, res)=>{
     console.log('Heyy ' + req.user)
     try {
         const user = await User.findOne({email})
+        console.log(user)
         // if not user
         if(!user){
             return res.status(404).json({success:false, message:'User not found'})

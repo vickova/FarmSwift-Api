@@ -62,20 +62,19 @@ export const getAllProducts = async (req, res)=>{
 }
 
 // get tour by search
-export const getProductBySearch = async(req, res)=>{
-    // here 'i' means case sensitive
-    const city = new RegExp(req.query.city, 'i');
-    const distance = parseInt(req.query.distance);
-    const maxGroupSize = parseInt(req.query.maxGroupSize);
-    try {
+// export const getProductBySearch = async(req, res)=>{
+//     // here 'i' means case sensitive
+//     const name = new RegExp(req.query.name);
 
-        // gte means greater than equal i.e selects the documents where the value of the specified field is greater than or equal to
-        // { $set: { "price": 9.99 } : The following example sets the price field based on a 
-        // $gte
-        const tours = await Products.find({city, distance:{$gte:distance}, maxGroupSize:{$gte:maxGroupSize}}).populate('reviews')
+//     try {
 
-        res.status(200).json({success:true,count:tours.length, message:'Successful', data:tours})
-    } catch (err) {
-        res.status(500).json({success:false, message:'not found'})
-    }
-}
+//         // gte means greater than equal i.e selects the documents where the value of the specified field is greater than or equal to
+//         // { $set: { "price": 9.99 } : The following example sets the price field based on a 
+//         // $gte
+//         const tours = await Products.find({name}).populate('reviews')
+
+//         res.status(200).json({success:true,count:tours.length, message:'Successful', data:tours})
+//     } catch (err) {
+//         res.status(500).json({success:false, message:'not found'})
+//     }
+// }

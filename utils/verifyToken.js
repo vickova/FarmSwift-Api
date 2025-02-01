@@ -23,7 +23,7 @@ export const verifyUser = (req, res, next)=>{
     verifyToken(req, res, next, ()=>{
         // console.log(reg.user)
         // console.log(req.params)
-        if(req.user.id === req.params.id || req.user.role === 'admin'){
+        if(req.user.id === req.params.id || req.user.user_role === 'admin'){
             next()
         }
         else{
@@ -33,7 +33,7 @@ export const verifyUser = (req, res, next)=>{
 }
 export const verifySeller = (req, res, next)=>{
     verifyToken(req, res, next, ()=>{
-        if(req.user.role === 'admin'){
+        if(req.user.user_role === 'admin'){
             next()
         }
         else{
