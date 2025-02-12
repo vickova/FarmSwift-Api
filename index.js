@@ -7,6 +7,8 @@ import authRoute from './router/authRoute.js';
 import productRoute from './router/ProductsRoute.js';
 import userRoute from './router/AppUsers.js';
 import cartRoute from './router/CartRoute.js';
+import orderRoute from './router/OrderRoute.js';
+import bankRoute from './router/Banks.js'
 import wishRoute from './router/WishRoute.js'
 import RewviewsandRatingRoute from './router/rewiewandRating.js';
 
@@ -42,7 +44,9 @@ app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/products', productRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/carts', cartRoute);
+app.use('/api/v1/order', orderRoute);
 app.use('/api/v1/wishes', wishRoute);
+app.use('/api/v1/banks', bankRoute);
 app.use('/api/v1/reviews', RewviewsandRatingRoute);
 
 

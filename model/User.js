@@ -71,6 +71,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "customer",
     },
+    isVerified: { type: Boolean, default: false },
+    verificationToken: { type: String },
 
     reviews: [reviewSchema], // Array to hold ratings and reviews for sellers
 
