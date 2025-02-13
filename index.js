@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import authRoute from './router/authRoute.js';
@@ -9,7 +10,11 @@ import userRoute from './router/AppUsers.js';
 import cartRoute from './router/CartRoute.js';
 import orderRoute from './router/OrderRoute.js';
 import bankRoute from './router/Banks.js'
-import wishRoute from './router/WishRoute.js'
+import wishRoute from './router/WishRoute.js';
+import rateLimiter from 'express-rate-limit';
+import xss from 'xss-clean';
+import { swaggerUi, swaggerDocs } from "./swaggerConfig.js";
+
 import RewviewsandRatingRoute from './router/rewiewandRating.js';
 
 
@@ -17,12 +22,35 @@ dotenv.config()
 
 const app = express();
 const port = process.env.PORT || 4000;
-
+// Serve Swagger UI at /api-docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 const corsOptions = {
     origin:true,
     credentials:true
 }
 
+
+
+// security packages
+app.use(cors({
+    origin: '*',
+    credentials: true,
+    methods: ['POST', 'GET', 'PATCH', 'DELETE']
+}))
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
+app.set('trust proxy', 1)
+const Limiter = rateLimiter({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+})
+
+// app.use(Limiter())
+
+app.use(helmet());
+app.use(xss());
 
 mongoose.set("strictQuery", false)
 const connect = async()=>{
