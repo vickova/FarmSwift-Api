@@ -14,6 +14,28 @@ paths:
     put:
       summary: Update existing user info
       description: Users can update their information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                photo:
+                  type: string
+                role:
+                  type: string
+                user_role:
+                  type: string
+                description:
+                  type: string
       responses:
         "200":
           description: A successful update of user information.
@@ -22,8 +44,8 @@ paths:
       description: Users can delete their information.
       responses:
         "200":
-          description: A successful delete of user information.
-  
+          description: A successful deletion of user information.
+
   /users:
     get:
       summary: Get all users
@@ -31,11 +53,26 @@ paths:
       responses:
         "200":
           description: A list of users.
-  
+
   /users/bank-details:
     post:
-      summary: Upload users bank details
-      description: Upload specific users bank details.
+      summary: Upload users' bank details
+      description: Upload specific users' bank details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                bankName:
+                  type: string
+                accountNumber:
+                  type: string
+                bankCode:
+                  type: string
       responses:
         "200":
           description: A success message.
@@ -44,14 +81,48 @@ paths:
     post:
       summary: Register user
       description: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                photo:
+                  type: string
+                role:
+                  type: string
+                user_role:
+                  type: string
+                description:
+                  type: string
       responses:
         "200":
-          description: A successful registration of users.
+          description: A successful registration of user.
 
   /auth/login:
     post:
       summary: Login user
       description: Login registered user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
       responses:
         "200":
           description: A successful login of user.
@@ -66,11 +137,21 @@ paths:
 
   /auth/resend-verification-email:
     post:
-      summary: Resend verification to email
+      summary: Resend verification email
       description: Resend verification in case of failed email verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
       responses:
         "200":
-          description: A successful resend of verification to user email.
+          description: A successful resend of verification email.
 
   /auth/update-bank-details/{userId}:
     put:
@@ -91,10 +172,26 @@ paths:
   /orders/create:
     post:
       summary: Create new order
-      description: Create new order for the user.
+      description: Create a new order for the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                shippingAddress:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                name:
+                  type: string
       responses:
         "200":
-          description: A successful creation of customer's order.
+          description: A successful creation of customer order.
 
   /orders/pay:
     post:
@@ -124,14 +221,6 @@ paths:
         "200":
           description: A successful addition of items to cart.
 
-  /products/delete:
-    delete:
-      summary: Delete Product added by Seller
-      description: Delete Product added by seller.
-      responses:
-        "200":
-          description: A successful deletion of product.
-
   /products:
     get:
       summary: Get all products
@@ -141,7 +230,7 @@ paths:
           description: A list of products available.
     post:
       summary: Create Product
-      description: Create new Product.
+      description: Create new product.
       responses:
         "200":
           description: A successful creation of product.
@@ -164,9 +253,22 @@ paths:
     post:
       summary: Add new review
       description: Add review to seller.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sellerId:
+                  type: string
+                rating:
+                  type: integer
+                review:
+                  type: string
       responses:
         "200":
-          description: A successful rating and review of customer.
+          description: A successful rating and review of seller.
 
   /wishes/{id}:
     delete:
@@ -183,7 +285,7 @@ paths:
           description: A list of wish items.
     post:
       summary: Add wish items
-      description: Add new items to wish.
+      description: Add new items to wish list.
       responses:
         "200":
-          description: A successful addition of items to wish.
+          description: A successful addition of items to wish list.
