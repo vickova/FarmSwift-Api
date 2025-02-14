@@ -18,8 +18,14 @@ const transporter = nodemailer.createTransport({
 });
 
 // Register function with email verification
-export const register = async(req, res) => {
+export const register = async (req, res) => {
     try {
+        // Check if user already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: "Email already in use. Please log in." });
+        }
+
         // Hash password
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt);
@@ -29,21 +35,22 @@ export const register = async(req, res) => {
 
         // Create new user (not verified yet)
         const newUser = new User({
-            username:req.body.username,
-            email:req.body.email,
-            password:hash,
-            photo:req.body.photo,
-            role:req.body.role,
-            user_role:req.body.user_role,
+            username: req.body.username,
+            email: req.body.email,
+            password: hash,
+            photo: req.body.photo,
+            role: req.body.role,
+            user_role: req.body.user_role,
             description: req.body.description,
             isVerified: false,
             verificationToken
         });
 
+        // Save user to DB before sending email
+        await newUser.save();
 
         // Send verification email
         const verificationLink = `http://localhost:5000/api/auth/verify/${verificationToken}`;
-
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: req.body.email,
@@ -55,13 +62,13 @@ export const register = async(req, res) => {
         });
 
         res.status(200).json({ success: true, message: "Registration successful! Check your email to verify your account." });
-        // Save user to DB
-        await newUser.save();
+
     } catch (err) {
         console.error("Registration Error:", err);
         res.status(500).json({ success: false, message: "Failed to register. Try again later." });
     }
 };
+
 
 export const verifyEmail = async (req, res) => {
     try {
