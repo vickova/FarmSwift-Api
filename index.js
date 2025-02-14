@@ -40,9 +40,14 @@ const corsOptions = {
 // Security packages
 app.use(cors(corsOptions));
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    res.setHeader("Cross-Origin-Embedder-Policy", "require-corp"); // Only if needed
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Change * to a specific domain if needed
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
-});
+  });
+  
 app.set('trust proxy', 1);
 const Limiter = rateLimiter({
     windowMs: 15 * 60 * 1000, // 15 minutes
