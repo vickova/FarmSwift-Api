@@ -23,7 +23,7 @@ export const register = async (req, res) => {
         // Check if user already exists
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) {
-            return res.status(400).json({ success: false, message: "Email already in use. Please log in.", error:"Email already in use. Please log in." });
+            return res.status(400).json({ success: false, message: "Email already in use. Please log in." });
         }
 
         // Hash password
@@ -65,10 +65,9 @@ export const register = async (req, res) => {
 
     } catch (err) {
         console.error("Registration Error:", err);
-        res.status(500).json({ success: false, message: "Failed to register. Try again later.", error:err });
+        res.status(500).json({ success: false, message: "Failed to register. Try again later." });
     }
 };
-
 
 export const verifyEmail = async (req, res) => {
     try {
