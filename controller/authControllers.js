@@ -50,7 +50,7 @@ export const register = async (req, res) => {
         await newUser.save();
 
         // Send verification email
-        const verificationLink = `http://localhost:5000/api/auth/verify/${verificationToken}`;
+        const verificationLink = `http://localhost:3000/verify?token=${verificationToken}`;
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: req.body.email,
@@ -68,6 +68,7 @@ export const register = async (req, res) => {
         res.status(500).json({ success: false, message: "Failed to register. Try again later." });
     }
 };
+
 
 export const verifyEmail = async (req, res) => {
     try {
@@ -116,7 +117,7 @@ export const resendVerificationEmail = async (req, res) => {
         await user.save();
 
         // Send new verification email
-        const verificationLink = `http://localhost:5000/api/auth/verify/${verificationToken}`;
+        const verificationLink = `http://localhost:3000/api/auth/verify/${verificationToken}`;
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: user.email,
