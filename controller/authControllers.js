@@ -65,7 +65,7 @@ export const register = async (req, res) => {
 
     } catch (err) {
         console.error("Registration Error:", err);
-        res.status(500).json({ success: false, message: "Failed to register. Try again later." });
+        res.status(500).json({ success: false, message: "Failed to register. Try again later.", error:err });
     }
 };
 
