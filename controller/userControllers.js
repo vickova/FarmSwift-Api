@@ -1,4 +1,6 @@
 import User from "../model/User.js";
+import bcrypt from 'bcrypt';
+
 
 // create new User
 export const createUser =  async (req, res)=>{
@@ -13,18 +15,28 @@ export const createUser =  async (req, res)=>{
 }
 
 // update User
-export const updateUser = async (req, res)=>{
+export const updateUser = async (req, res) => {
+    const id = req.params.id;
 
-    const id = req.params.id
     try {
-        const updatedUser = await User.findByIdAndUpdate(id, {
-            $set:req.body
-        }, {new:true});
-        res.status(200).json({success:true, message:'Successfully updated', data:updatedUser})
+        let updatedData = { ...req.body };
+
+        // Hash password if it's being updated
+        if (req.body.password) {
+            updatedData.password = await bcrypt.hash(req.body.password, 10);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(id, { $set: updatedData }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        res.status(200).json({ success: true, message: 'Successfully updated', data: updatedUser });
     } catch (err) {
-        res.status(500).json({success:false, message:'Failed to update. Try again'})
+        res.status(500).json({ success: false, message: 'Failed to update. Try again', error: err.message });
     }
-}
+};
 // delete User
 export const deleteUser = async (req, res)=>{
     const id = req.params.id

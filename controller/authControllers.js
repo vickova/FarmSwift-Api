@@ -40,7 +40,6 @@ export const register = async (req, res) => {
             password: hash,
             photo: req.body.photo,
             role: req.body.role,
-            user_role: req.body.user_role,
             description: req.body.description,
             isVerified: false,
             verificationToken
@@ -140,10 +139,12 @@ export const resendVerificationEmail = async (req, res) => {
 // login
 export const login = async(req, res) => {
     const email = req.body.email;
-
+    
     try {
         const user = await User.findOne({ email });
-
+        const hashedBodyPassword = await bcrypt.hash(req.body.password, 10);
+        console.log(hashedBodyPassword)
+        console.log(user.password)
         // If user not found
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
