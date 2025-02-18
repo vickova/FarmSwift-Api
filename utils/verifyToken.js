@@ -30,7 +30,7 @@ export const verifyUser = (req, res, next)=>{
 }
 export const verifySeller = (req, res, next)=>{
     verifyToken(req, res, next, ()=>{
-        if(req.user.user_role === 'admin'){
+        if(req.user.role === 'seller'){
             next()
         }
         else{
