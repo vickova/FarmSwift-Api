@@ -29,7 +29,6 @@ export const verifyUser = (req, res, next)=>{
     })
 }
 export const verifySeller = (req, res, next)=>{
-    console.log(req.user)
     verifyToken(req, res, ()=>{
         console.log(req.user)
         if(req.user.role === 'seller'){

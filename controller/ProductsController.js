@@ -8,7 +8,7 @@ export const createProduct =  async (req, res)=>{
         const savedProduct = await newProduct.save()
         res.status(200).json({success:true, message:'Successfully created', data:savedProduct})
     } catch (err) {
-        res.status(500).json({success:false, message:'Failed to create. Try again'})
+        res.status(500).json({success:false, message:err})
     }
 }
 
