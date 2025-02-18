@@ -137,14 +137,12 @@ export const resendVerificationEmail = async (req, res) => {
 
 
 // login
-export const login = async(req, res) => {
+export const login = async (req, res) => {
     const email = req.body.email;
-    
+
     try {
         const user = await User.findOne({ email });
-        const hashedBodyPassword = await bcrypt.hash(req.body.password, 10);
-        console.log(hashedBodyPassword)
-        console.log(user.password)
+
         // If user not found
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
@@ -155,7 +153,7 @@ export const login = async(req, res) => {
             return res.status(401).json({ success: false, message: "Email not verified. Please check your email." });
         }
 
-        // Check password
+        // Check password (Do NOT rehash the password)
         const checkCorrectPassword = await bcrypt.compare(req.body.password, user.password);
         if (!checkCorrectPassword) {
             return res.status(401).json({ success: false, message: "Incorrect email or password" });
@@ -164,10 +162,17 @@ export const login = async(req, res) => {
         const { password, role, ...rest } = user._doc;
 
         // Create JWT token
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: "15d" });
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: "15d" }
+        );
 
-        res.cookie('accessToken', token, {
+        // Set secure cookie
+        res.cookie("accessToken", token, {
             httpOnly: true,
+            secure: true, // Ensure HTTPS
+            sameSite: "None", // Allow cross-origin authentication
             expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
         }).status(200).json({ success: true, message: "Successfully logged in", token, data: { ...rest }, role });
 
@@ -175,3 +180,4 @@ export const login = async(req, res) => {
         return res.status(500).json({ success: false, message: "Failed to login" });
     }
 };
+
