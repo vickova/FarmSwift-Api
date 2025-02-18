@@ -174,7 +174,7 @@ export const login = async (req, res) => {
             secure: true, // Ensure HTTPS
             sameSite: "None", // Allow cross-origin authentication
             expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
-        }).status(200).json({ success: true, message: "Successfully logged in", token, data: { ...rest }, role });
+        }).status(200).json({ success: true, message: "Successfully logged in", token, data: { ...rest, role:role } });
 
     } catch (err) {
         return res.status(500).json({ success: false, message: "Failed to login" });
