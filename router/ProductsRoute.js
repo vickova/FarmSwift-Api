@@ -1,6 +1,6 @@
 import express from 'express';
 import { createProduct, getAllProducts, getSingleProduct, deleteProduct,updateProduct } from '../controller/ProductsController.js';
-import { verifySeller } from '../utils/verifyToken.js';
+import { verifySeller, verifyUser } from '../utils/verifyToken.js';
 
 const router = express.Router();
 
@@ -44,7 +44,7 @@ const router = express.Router();
 */
 
 // create new tour
-router.route('/').post(verifySeller,createProduct).get(getAllProducts)
+router.route('/').post(verifySeller,createProduct).get(verifyUser,getAllProducts)
 router.route('/:id').get(getSingleProduct).delete(verifySeller,deleteProduct).put(verifySeller,updateProduct)
 // router.route('/search/getProductBySearch').get(getProductBySearch)
 
