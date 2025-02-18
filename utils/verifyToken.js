@@ -1,23 +1,20 @@
 import jwt from 'jsonwebtoken';
 
-const verifyToken = (req, res, next)=>{
-    const token = req?.cookies?.accessToken;
+export const verifyToken = (req, res, next) => {
+    const token = req.cookies?.accessToken || req.headers?.authorization?.split(" ")[1];
 
-    if(!token){
-        return res.status(401).json({success:false, message:'You are not authorized'})
+    if (!token) {
+        return res.status(401).json({ success: false, message: "Unauthorized - No token provided" });
     }
 
-    // if token exist then verify the token
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user)=>{
-        console.log(user)
-        if(err){
-            return res.status(401).json({success:false, message:'token is invalid'})
-        }
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+        if (err) return res.status(403).json({ success: false, message: "Forbidden - Invalid token" });
 
-        req.user = user;
-        next()
-    })
-}
+        req.user = user; // Attach user info to request
+        next();
+    });
+};
+
 
 export const verifyUser = (req, res, next)=>{
     verifyToken(req, res, next, ()=>{

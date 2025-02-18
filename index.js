@@ -32,7 +32,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 console.log("Swagger documentation available at /api-docs");
 
 const corsOptions = {
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "https://farm-swift.vercel.app/"],
     credentials: true,
     methods: ['POST', 'GET', 'PATCH', 'DELETE', 'PUT']
 };
