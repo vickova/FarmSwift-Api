@@ -38,7 +38,7 @@ const router = express.Router()
  *         description: A success message.
  */
 router.route('/:id').put(verifyUser,updateUser).delete(verifyUser,deleteUser).get(verifyUser,getSingleUser)
-router.route('/').get(verifyUser,getAllUser)
+router.route('/').get(getAllUser)
 router.route('/bank-details').post(verifySeller,addSellerDetails)
 
 export default router
