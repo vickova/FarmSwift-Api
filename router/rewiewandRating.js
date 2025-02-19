@@ -15,6 +15,6 @@ const router = express.Router()
  *         description: A successful rating and review of customer.
 */
 
-router.route('/').post(verifyUser, addReview)
+router.route('/:id').post(verifyUser, addReview)
 
 export default router

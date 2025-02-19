@@ -18,8 +18,8 @@ export const verifyToken = (req, res, next) => {
 
 export const verifyUser = (req, res, next)=>{
     verifyToken(req, res, ()=>{
-        // console.log(reg.user)
-        // console.log(req.params)
+        console.log(req.user)
+        console.log(req.params)
         if(req.user.id === req.params.id || req.user.user_role === 'admin'){
             next()
         }
