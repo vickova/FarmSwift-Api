@@ -1,6 +1,6 @@
 import express from 'express';
 import { verifySeller, verifyUser } from '../utils/verifyToken.js';
-import { addToWish, deleteFromWish } from '../controller/WishController.js';
+import { addToWish, deleteFromWish, getAllWishItems } from '../controller/WishController.js';
 
 const router = express.Router();
 /** 
@@ -30,7 +30,7 @@ const router = express.Router();
 
 
 // create new wish
-router.route('/:id').delete(verifyUser,deleteFromWish).post(verifyUser,addToWish)
+router.route('/:id').delete(verifyUser,deleteFromWish).post(verifyUser,addToWish).get(getAllWishItems)
 // router.route('/search/getProductBySearch').get(getProductBySearch)
 
 export default router
