@@ -1,5 +1,6 @@
 import Products from "../model/Products.js";
 import Wish from "../model/Wish.js";
+import User from "../model/User.js";
 
 export const addToWish = async (req, res) => {
   const productId = req.params.id;
@@ -102,24 +103,36 @@ export const getAllWishItems = async (req, res) => {
   try {
     const { id } = req.params; // Get userId from URL params
 
-    const cartItems = await Wish.findOne({ user: id }).populate("items.product");
+    const userExists = await User.findById(id); // Check if user exists
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-    if (!cartItems) {
+    const wishItems = await Wish.findOne({ user: id }).populate("items.product");
+
+    if (!wishItems) {
       return res.status(200).json({
         success: true,
         count: 0,
-        message: "No wishlist items found",
+        message: "No wish items found",
         data: [],
       });
     }
 
     res.status(200).json({
       success: true,
-      count: cartItems.items.length,
+      count: wishItems.items.length,
       message: "Successful",
-      data: cartItems.items,
+      data: wishItems.items,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };

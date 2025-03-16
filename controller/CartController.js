@@ -1,5 +1,6 @@
 import Products from "../model/Products.js";
 import Cart from "../model/Cart.js";
+import User from "../model/User.js";
 
 export const addToCart = async (req, res) => {
   const productId = req.params.id;
@@ -96,6 +97,14 @@ export const getAllCartItems = async (req, res) => {
   try {
     const { id } = req.params; // Get userId from URL params
 
+    const userExists = await User.findById(id); // Check if user exists
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     const cartItems = await Cart.findOne({ user: id }).populate("items.product");
 
     if (!cartItems) {
@@ -114,6 +123,10 @@ export const getAllCartItems = async (req, res) => {
       data: cartItems.items,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
