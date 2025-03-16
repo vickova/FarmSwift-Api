@@ -92,16 +92,28 @@ export const deleteFromCart = async (req, res) => {
   }
 };
 
-export const getAllCartItems = async (req, res)=>{
-
+export const getAllCartItems = async (req, res) => {
   try {
-    const { id } = req.params;  // Get userId from URL params
+    const { id } = req.params; // Get userId from URL params
 
-        const cartItems = await Cart.findOne({ user: id }).populate("items.product");
-        console.log(cartItems)
-        res.status(200).json({success:true,count:cartItems.items.length, message:'Successful', data:cartItems.items})
-    } catch (err) {
-        res.status(404).json({success:false, message:err})
+    const cartItems = await Cart.findOne({ user: id }).populate("items.product");
+
+    if (!cartItems) {
+      return res.status(200).json({
+        success: true,
+        count: 0,
+        message: "No cart items found",
+        data: [],
+      });
     }
 
-}
+    res.status(200).json({
+      success: true,
+      count: cartItems.items.length,
+      message: "Successful",
+      data: cartItems.items,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
