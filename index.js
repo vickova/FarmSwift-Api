@@ -17,6 +17,7 @@ import cartRoute from './router/CartRoute.js';
 import orderRoute from './router/OrderRoute.js';
 import bankRoute from './router/Banks.js';
 import wishRoute from './router/WishRoute.js';
+import contactRoute from './router/Contact.js'
 import RewviewsandRatingRoute from './router/rewiewandRating.js';
 
 dotenv.config();
@@ -71,6 +72,7 @@ app.use('/api/v1/carts', cartRoute);
 app.use('/api/v1/order', orderRoute);
 app.use('/api/v1/wishes', wishRoute);
 app.use('/api/v1/banks', bankRoute);
+app.use('/api/v1/contact', contactRoute);
 app.use('/api/v1/reviews', RewviewsandRatingRoute);
 
 // MongoDB Connection
