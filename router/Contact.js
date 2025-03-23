@@ -7,13 +7,12 @@ const router = express.Router();
 * @swagger
  * /  /banks
  *  get:
- *     summary: Get all bank list
- *     description: Retrieve a list of all banks wth their codes.
+ *     summary: send the message from the contect form to the organization
  *     responses:
  *       200:
- *         description: A list of banks.
+ *         description: A successful message.
 */
-router.get('/', contact);
+router.post('/', contact);
 
 
 export default router;
