@@ -43,7 +43,7 @@ app.use(cors(corsOptions));
 app.use((req, res, next) => {
     res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
     res.setHeader("Cross-Origin-Embedder-Policy", "require-corp"); // Only if needed
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // Change * to a specific domain if needed
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000", "http://localhost:5173"); // Change * to a specific domain if needed
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
