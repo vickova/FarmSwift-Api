@@ -55,7 +55,7 @@ export const deletePlantAnalysis = async (req, res) => {
   
     try {
       // Check if the plant analysis exists and belongs to the authenticated user
-      const plantAnalysis = await Plant.findOne({ _id: id, userId });
+      const plantAnalysis = await Plants.findOne({ _id: id, userId });
   
       if (!plantAnalysis) {
         return res.status(404).json({ success: false, message: "Plant analysis not found" });
