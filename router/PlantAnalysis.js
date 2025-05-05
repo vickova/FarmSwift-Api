@@ -24,7 +24,7 @@ const router = express.Router();
  *         description: Payment is successful.
  */
 router.route('/save').post(verifyUser,savePlantAnalysis); // Route to add a new plant to the database
-router.route('/delete').delete(verifyUser,deletePlantAnalysis);
+router.route('/delete/:id').delete(verifyUser,deletePlantAnalysis);
 
 router.route('/all-plants').get(verifyUser, getPlantAnalysis); // Route to initialize payment
 
