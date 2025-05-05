@@ -19,6 +19,8 @@ import bankRoute from './router/Banks.js';
 import wishRoute from './router/WishRoute.js';
 import contactRoute from './router/Contact.js'
 import RewviewsandRatingRoute from './router/rewiewandRating.js';
+import PlantRoute from './router/PlantAnalysis.js';
+
 
 dotenv.config();
 
@@ -40,14 +42,14 @@ const corsOptions = {
 
 // Security packages
 app.use(cors(corsOptions));
-app.use((req, res, next) => {
-    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-    res.setHeader("Cross-Origin-Embedder-Policy", "require-corp"); // Only if needed
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000", "http://localhost:5173"); // Change * to a specific domain if needed
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+//     res.setHeader("Cross-Origin-Embedder-Policy", "require-corp"); // Only if needed
+//     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000", "http://localhost:5173"); // Change * to a specific domain if needed
+//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
+//     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     next();
+// });
   
 app.set('trust proxy', 1);
 const Limiter = rateLimiter({
@@ -74,6 +76,8 @@ app.use('/api/v1/wishes', wishRoute);
 app.use('/api/v1/banks', bankRoute);
 app.use('/api/v1/contact', contactRoute);
 app.use('/api/v1/reviews', RewviewsandRatingRoute);
+app.use('/api/v1/plants', PlantRoute); // Route to add a new plant to the database
+
 
 // MongoDB Connection
 mongoose.set("strictQuery", false);
