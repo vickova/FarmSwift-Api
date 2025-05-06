@@ -62,7 +62,7 @@ export const deletePlantAnalysis = async (req, res) => {
       }
   
       // Delete the plant analysis record
-      await plantAnalysis.remove();
+      await plantAnalysis.deleteOne();
   
       return res.status(200).json({ success: true, message: "Plant analysis deleted successfully" });
     } catch (error) {
