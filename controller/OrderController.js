@@ -148,7 +148,9 @@ export const verifyPayment = async (req, res) => {
       // Update order in DB
       await Order.findOneAndUpdate(
         { paymentReference: paymentData.tx_ref },
-        { paymentStatus: "paid" }
+        { paymentStatus: "paid" },
+        { new: true, runValidators: true }
+
       );
 
       return res.status(200).json({
