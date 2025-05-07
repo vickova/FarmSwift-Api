@@ -127,3 +127,52 @@ export const initializePayment = async (req, res) => {
         res.status(500).json({ error: error.response?.data || "Payment initialization failed" });
     }
 };
+
+
+export const verifyPayment = async (req, res) => {
+  try {
+    const { transactionId } = req.params;
+
+    const flutterwaveRes = await axios.get(
+      `https://api.flutterwave.com/v3/transactions/${transactionId}/verify`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+        },
+      }
+    );
+
+    const paymentData = flutterwaveRes.data.data;
+
+    if (paymentData.status === "successful") {
+      // Update order in DB
+      await Order.findOneAndUpdate(
+        { paymentReference: paymentData.tx_ref },
+        { paymentStatus: "successful" }
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Payment verified",
+        data: {
+          amount: paymentData.amount,
+          tx_ref: paymentData.tx_ref,
+          status: paymentData.status,
+        },
+      });
+    } else {
+      await Order.findOneAndUpdate(
+        { paymentReference: paymentData.tx_ref },
+        { paymentStatus: "failed" }
+      );
+
+      return res.status(200).json({
+        success: false,
+        message: "Payment not successful",
+      });
+    }
+  } catch (error) {
+    console.error("Payment verification error:", error.message);
+    res.status(500).json({ success: false, message: "Verification failed" });
+  }
+};

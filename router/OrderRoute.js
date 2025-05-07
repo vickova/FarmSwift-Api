@@ -1,5 +1,5 @@
 import express from 'express';
-import { createOrder, getUserOrders } from '../controller/OrderController.js';
+import { createOrder, getUserOrders, verifyPayment } from '../controller/OrderController.js';
 import { initializePayment } from '../controller/OrderController.js';
 
 const router = express.Router();
@@ -24,6 +24,8 @@ const router = express.Router();
 router.post('/create', createOrder);
 router.get('/:id', getUserOrders);
 router.post('/pay', initializePayment); // Route to initialize payment
+router.post('/pay/verify', verifyPayment); // Route to initialize payment
+
 
 
 export default router;
