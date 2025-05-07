@@ -23,24 +23,20 @@ export const createOrder = async (req, res) => {
   try {
     const { userId, email, name, shippingAddress } = req.body;
 
-    // Get user's cart
     const cart = await Cart.findOne({ user: userId });
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ success: false, message: "Cart is empty" });
     }
 
-    // Calculate total amount
     const totalAmount = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    // Generate unique transaction reference
     const transactionRef = `TX-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
-    // Create order in DB
     const order = new Order({
       user: userId,
-      name:name,
-      email:email,
+      name,
+      email,
       products: cart.items,
       totalAmount,
       shippingAddress,
@@ -50,12 +46,19 @@ export const createOrder = async (req, res) => {
 
     await order.save();
 
-    
+    // Optional: Clear cart after order
+    await Cart.findOneAndUpdate({ user: userId }, { items: [] });
 
-    // Clear the cart after successful order creation
+    res.status(201).json({
+      success: true,
+      message: "Order created successfully",
+      orderId: order._id,
+      transactionRef
+    });
+
   } catch (error) {
     console.error("Order Creation Error:", error);
-    res.status(500).json({ success: false, message: error });
+    res.status(500).json({ success: false, message: error.message || error });
   }
 };
 
