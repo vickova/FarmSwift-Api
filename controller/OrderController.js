@@ -39,6 +39,8 @@ export const createOrder = async (req, res) => {
     // Create order in DB
     const order = new Order({
       user: userId,
+      name:name,
+      email:email,
       products: cart.items,
       totalAmount,
       shippingAddress,
