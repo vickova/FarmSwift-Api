@@ -24,7 +24,7 @@ const router = express.Router();
 router.post('/create', createOrder);
 router.get('/:id', getUserOrders);
 router.post('/pay', initializePayment); // Route to initialize payment
-router.post('/pay/verify', verifyPayment); // Route to initialize payment
+router.post('/pay/verify/:id', verifyPayment); // Route to initialize payment
 
 
 
