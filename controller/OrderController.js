@@ -94,7 +94,7 @@ export const initializePayment = async (req, res) => {
             tx_ref: `txn_${Date.now()}`, // Unique transaction reference
             amount: amount, // Amount to be paid
             currency: "NGN",
-            redirect_url: "http://localhost:3000/payment-success",
+            redirect_url: "http://localhost:3000/payment-status",
             payment_options: "card, banktransfer, ussd",
             customer: {
                 email: email
