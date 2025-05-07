@@ -94,7 +94,7 @@ export const initializePayment = async (req, res) => {
             tx_ref: `txn_${Date.now()}`, // Unique transaction reference
             amount: amount, // Amount to be paid
             currency: "NGN",
-            redirect_url: "https://yourfrontend.com/payment-success",
+            redirect_url: "http://localhost:3000//payment-success",
             payment_options: "card, banktransfer, ussd",
             customer: {
                 email: email
@@ -119,9 +119,9 @@ export const initializePayment = async (req, res) => {
         );
 
         // Send Flutterwave checkout link to the frontend
-        res.json({success: true,
+        return res.json({success: true,
           message: "Order created, complete payment", checkoutUrl: response.data.data.link });
-        await Cart.findOneAndUpdate({ user:  req.user.id }, { products: [] });
+        // await Cart.findOneAndUpdate({ user:  req.user.id }, { products: [] });
 
     } catch (error) {
         res.status(500).json({ error: error.response?.data || "Payment initialization failed" });
