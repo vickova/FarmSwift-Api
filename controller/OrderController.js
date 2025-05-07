@@ -87,11 +87,11 @@ export const getUserOrders = async (req, res) => {
 
 export const initializePayment = async (req, res) => {
     try {
-        const { email, amount, orderId } = req.body;
+        const { email, amount, orderId, transactionRef } = req.body;
 
         // Prepare payment data
         const paymentData = {
-            tx_ref: `txn_${Date.now()}`, // Unique transaction reference
+            tx_ref: transactionRef, // Unique transaction reference
             amount: amount, // Amount to be paid
             currency: "NGN",
             redirect_url: "http://localhost:3000/payment-status",
