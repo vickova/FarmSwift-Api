@@ -102,7 +102,7 @@ export const initializePayment = async (req, res) => {
             customizations: {
                 title: "FarmSwift Payment",
                 description: "Payment for order",
-                logo: "https://yourlogo.com/logo.png"
+                logo: "https://imgur.com/a/6qoeQGb"
             }
         };
 
