@@ -131,10 +131,10 @@ export const initializePayment = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
   try {
-    const { transactionId } = req.params;
+    const { id } = req.params;
 
     const flutterwaveRes = await axios.get(
-      `https://api.flutterwave.com/v3/transactions/${transactionId}/verify`,
+      `https://api.flutterwave.com/v3/transactions/${id}/verify`,
       {
         headers: {
           Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
