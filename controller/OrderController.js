@@ -21,7 +21,7 @@ const flw = new Flutterwave(
 );
 export const createOrder = async (req, res) => {
   try {
-    const { userId, email, name, shippingAddress } = req.body;
+    const { userId, email, name, shippingAddress, remarks } = req.body;
 
     const cart = await Cart.findOne({ user: userId });
 
@@ -39,6 +39,7 @@ export const createOrder = async (req, res) => {
       email,
       products: cart.items,
       totalAmount,
+      remarks,
       shippingAddress,
       paymentReference: transactionRef,
       paymentStatus: "pending",
