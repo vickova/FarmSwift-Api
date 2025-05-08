@@ -209,12 +209,11 @@ export const verifyPayment = async (req, res) => {
 // GET /api/seller/orders/:sellerId
 export const getSellerOrders = async (req, res) => {
   const { sellerId } = req.params;
-console.log("Seller ID:", sellerId);
   try {
     // Get all orders where the seller is associated with any product
     const orders = await Order.find({ "products.seller": sellerId })
       .sort({ createdAt: -1 });
-    console.log("Seller Orders:", orders);
+    // console.log("Seller Orders:", orders);
     // Optional: Filter out orders to include only the products sold by the seller
     const sellerOrders = orders.map(order => {
       const sellerProducts = order.products.filter(p => p.seller.toString() === sellerId.toString());

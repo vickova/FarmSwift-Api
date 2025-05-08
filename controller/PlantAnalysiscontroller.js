@@ -38,9 +38,10 @@ export const getPlantAnalysis = async (req, res) => {
   try {
     // Retrieve plant analysis records for the user
     const plants = await Plants.find({ userId });
+    console.log({plants});
 
     if (!plants.length) {
-      return res.status(404).json({ success: false, message: "No plant analysis found" });
+      return res.status(200).json({ success: false, message: "No plant analysis found", data:plants });
     }
 
     return res.status(200).json({ success: true, data: plants });
