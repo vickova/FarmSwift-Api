@@ -1,5 +1,5 @@
 import express from 'express';
-import { createOrder, getUserOrders, verifyPayment } from '../controller/OrderController.js';
+import { createOrder, getSellerOrders, getUserOrders, verifyPayment } from '../controller/OrderController.js';
 import { initializePayment } from '../controller/OrderController.js';
 
 const router = express.Router();
@@ -23,6 +23,7 @@ const router = express.Router();
  */
 router.post('/create', createOrder);
 router.get('/:id', getUserOrders);
+router.get('/seller/:id', getSellerOrders);
 router.post('/pay', initializePayment); // Route to initialize payment
 router.post('/pay/verify/:id', verifyPayment); // Route to initialize payment
 

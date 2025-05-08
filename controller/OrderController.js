@@ -29,6 +29,19 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ success: false, message: "Cart is empty" });
     }
 
+    // Update the products with their seller IDs
+    const orderItems = await Promise.all(
+      cart.items.map(async (item) => {
+        const product = await Product.findById(item.product);
+        return {
+          product: product._id,
+          quantity: item.quantity,
+          seller: product.seller // Assuming the 'Product' model has a 'seller' field
+        };
+      })
+    );
+
+    // Calculate the total amount based on the cart items
     const totalAmount = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     const transactionRef = `TX-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
@@ -37,7 +50,7 @@ export const createOrder = async (req, res) => {
       user: userId,
       name,
       email,
-      products: cart.items,
+      products: orderItems,
       totalAmount,
       remarks,
       shippingAddress,
@@ -62,6 +75,7 @@ export const createOrder = async (req, res) => {
     res.status(500).json({ success: false, message: error.message || error });
   }
 };
+
 
 export const getUserOrders = async (req, res) => {
   try {
@@ -176,5 +190,32 @@ export const verifyPayment = async (req, res) => {
   } catch (error) {
     console.error("Payment verification error:", error.message);
     res.status(500).json({ success: false, message: "Verification failed" });
+  }
+};
+
+// GET /api/seller/orders/:sellerId
+export const getSellerOrders = async (req, res) => {
+  const { sellerId } = req.params;
+
+  try {
+    // Get all orders where the seller is associated with any product
+    const orders = await Order.find({ "products.seller": sellerId })
+      .populate("products.product")
+      .sort({ createdAt: -1 });
+
+    // Optional: Filter out orders to include only the products sold by the seller
+    const sellerOrders = orders.map(order => {
+      const sellerProducts = order.products.filter(p => p.seller.toString() === sellerId);
+      return {
+        ...order.toObject(),
+        products: sellerProducts,
+        totalSellerAmount: sellerProducts.reduce((sum, p) => sum + p.product.price * p.quantity, 0)
+      };
+    });
+
+    res.json({ success: true, data: sellerOrders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Error fetching seller orders" });
   }
 };
