@@ -2,6 +2,7 @@ import Order from "../model/Order.js";
 import Cart from "../model/Cart.js";
 import Flutterwave from "flutterwave-node-v3";
 import dotenv from "dotenv";
+import Products from "../model/Products.js";
 import axios from 'axios';
 
 
@@ -32,7 +33,7 @@ export const createOrder = async (req, res) => {
     // Update the products with their seller IDs
     const orderItems = await Promise.all(
       cart.items.map(async (item) => {
-        const product = await Product.findById(item.product);
+        const product = await Products.findById(item.product);
         return {
           product: product._id,
           quantity: item.quantity,
