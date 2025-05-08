@@ -25,7 +25,7 @@ export const createOrder = async (req, res) => {
     const { userId, email, name, shippingAddress, remarks } = req.body;
 
     const cart = await Cart.findOne({ user: userId });
-
+    console.log("Cart:", cart);
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ success: false, message: "Cart is empty" });
     }
@@ -33,7 +33,9 @@ export const createOrder = async (req, res) => {
     // Update the products with their seller IDs
     const orderItems = await Promise.all(
       cart.items.map(async (item) => {
+        console.log("Cart Item:", item);
         const product = await Products.findById(item.product);
+        console.log("Product:", product);
         return {
           product: product._id,
           quantity: item.quantity,
@@ -58,7 +60,17 @@ export const createOrder = async (req, res) => {
       paymentReference: transactionRef,
       paymentStatus: "pending",
     });
-
+    console.log("Order:", {
+      user: userId,
+      name,
+      email,
+      products: orderItems,
+      totalAmount,
+      remarks,
+      shippingAddress,
+      paymentReference: transactionRef,
+      paymentStatus: "pending",
+    });
     await order.save();
 
     // Optional: Clear cart after order
@@ -197,16 +209,15 @@ export const verifyPayment = async (req, res) => {
 // GET /api/seller/orders/:sellerId
 export const getSellerOrders = async (req, res) => {
   const { sellerId } = req.params;
-
+console.log("Seller ID:", sellerId);
   try {
     // Get all orders where the seller is associated with any product
     const orders = await Order.find({ "products.seller": sellerId })
-      .populate("products.product")
       .sort({ createdAt: -1 });
-
+    console.log("Seller Orders:", orders);
     // Optional: Filter out orders to include only the products sold by the seller
     const sellerOrders = orders.map(order => {
-      const sellerProducts = order.products.filter(p => p.seller.toString() === sellerId);
+      const sellerProducts = order.products.filter(p => p.seller.toString() === sellerId.toString());
       return {
         ...order.toObject(),
         products: sellerProducts,
