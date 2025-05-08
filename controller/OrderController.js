@@ -37,7 +37,7 @@ export const createOrder = async (req, res) => {
         return {
           product: product._id,
           quantity: item.quantity,
-          seller: product.seller // Assuming the 'Product' model has a 'seller' field
+          seller: product.createdBy // Assuming the 'Product' model has a 'seller' field
         };
       })
     );
