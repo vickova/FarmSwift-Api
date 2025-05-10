@@ -1,6 +1,6 @@
 import express from 'express';
 import { verifySeller, verifyUser } from '../utils/verifyToken.js';
-import { addToCart, deleteFromCart, getAllCartItems } from '../controller/CartController.js';
+import { addToCart, deleteFromCart, getAllCartItems, reduceCartItemQuantity } from '../controller/CartController.js';
 
 const router = express.Router();
 
@@ -32,6 +32,7 @@ const router = express.Router();
 // create new cart
 router.route('/')
 router.route('/:id').delete(verifyUser,deleteFromCart).post(verifyUser,addToCart).get(getAllCartItems)
+router.route('/reduce/:id').patch(verifyUser,reduceCartItemQuantity)
 // router.route('/search/getProductBySearch').get(getProductBySearch)
 
 export default router
