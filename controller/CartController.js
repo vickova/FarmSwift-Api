@@ -143,21 +143,24 @@ export const reduceCartItemQuantity = async (req, res) => {
       return res.status(404).json({ success: false, message: "Cart not found" });
     }
 
-    const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+    const item = cart.items.find(item => item.product.toString() === productId);
 
-    if (itemIndex === -1) {
+    if (!item) {
       return res.status(404).json({ success: false, message: "Product not in cart" });
     }
-
-    const item = cart.items[itemIndex];
 
     if (item.quantity > 1) {
       item.quantity -= 1;
     } else {
-      // If quantity is 1, remove the item entirely
-      cart.items.splice(itemIndex, 1);
+      // Quantity is 1 — leave it as is, no removal
+      return res.status(200).json({
+        success: true,
+        message: "Item quantity cannot be reduced further",
+        cart,
+      });
     }
 
+    // Recalculate total price
     cart.totalPrice = cart.items.reduce(
       (total, item) => total + item.price * item.quantity,
       0
@@ -165,8 +168,13 @@ export const reduceCartItemQuantity = async (req, res) => {
 
     await cart.save();
 
-    return res.status(200).json({ success: true, message: "Item quantity updated", cart });
+    return res.status(200).json({
+      success: true,
+      message: "Item quantity reduced by 1",
+      cart,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
+
