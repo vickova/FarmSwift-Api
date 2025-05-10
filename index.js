@@ -50,7 +50,8 @@ app.use(cors(corsOptions));
 //     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 //     next();
 // });
-  
+app.options("*", cors()); // handle preflight requests
+
 app.set('trust proxy', 1);
 const Limiter = rateLimiter({
     windowMs: 15 * 60 * 1000, // 15 minutes
