@@ -37,7 +37,8 @@ console.log("Swagger documentation available at /api-docs");
 const corsOptions = {
     origin: ["http://localhost:3000", "https://farm-swift.vercel.app/", "http://localhost:5173"],
     credentials: true,
-    methods: ['POST', 'GET', 'PATCH', 'DELETE', 'PUT']
+    methods: ['POST', 'GET', 'PATCH', 'DELETE', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 // Security packages
