@@ -49,7 +49,7 @@ export const register = async (req, res) => {
         await newUser.save();
 
         // Send verification email
-        const verificationLink = `http://localhost:3000/verify?token=${verificationToken}`;
+        const verificationLink = `https://farm-swift.vercel.app/verify?token=${verificationToken}`;
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: req.body.email,
@@ -116,7 +116,7 @@ export const resendVerificationEmail = async (req, res) => {
         await user.save();
 
         // Send new verification email
-        const verificationLink = `http://localhost:3000/api/auth/verify/${verificationToken}`;
+        const verificationLink = `https://farm-swift.vercel.app/api/auth/verify/${verificationToken}`;
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: user.email,

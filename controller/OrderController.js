@@ -121,7 +121,7 @@ export const initializePayment = async (req, res) => {
             tx_ref: transactionRef, // Unique transaction reference
             amount: amount, // Amount to be paid
             currency: "NGN",
-            redirect_url: "http://localhost:3000/payment-status",
+            redirect_url: "https://farm-swift.vercel.app/payment-status",
             payment_options: "card, banktransfer, ussd",
             customer: {
                 email: email

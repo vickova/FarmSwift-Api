@@ -35,23 +35,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 console.log("Swagger documentation available at /api-docs");
 
 const corsOptions = {
-    origin: ["http://localhost:3000", "https://farm-swift.vercel.app", "http://localhost:5173"],
+    origin: ["http://localhost:3000", "https://farm-swift.vercel.app"],
     credentials: true,
     methods: ['POST', 'GET', 'PATCH', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 
-// Security packages
 app.use(cors(corsOptions));
 
-// app.use((req, res, next) => {
-//     res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-//     res.setHeader("Cross-Origin-Embedder-Policy", "require-corp"); // Only if needed
-//     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000", "http://localhost:5173"); // Change * to a specific domain if needed
-//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
-//     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//     next();
-// });
 app.options("*", cors()); // handle preflight requests
 
 app.set('trust proxy', 1);
